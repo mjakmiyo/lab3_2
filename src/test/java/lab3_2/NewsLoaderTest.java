@@ -18,6 +18,7 @@ import edu.iis.mto.staticmock.IncomingInfo;
 import edu.iis.mto.staticmock.IncomingNews;
 import edu.iis.mto.staticmock.NewsLoader;
 import edu.iis.mto.staticmock.NewsReaderFactory;
+import edu.iis.mto.staticmock.PublishableNews;
 import edu.iis.mto.staticmock.SubsciptionType;
 import edu.iis.mto.staticmock.reader.NewsReader;
 
@@ -38,6 +39,18 @@ public class NewsLoaderTest {
 	public void loadNewsShouldGetReaderTypeFromConfiguration() {
 		newsLoader.loadNews();
 		verify(configurationLoaderMock, times(1)).loadConfiguration();
+	}
+
+	@Test
+	public void loadNewsShouldNotPublishSubscriptionNews() {
+		final PublishableNews publishableNews = newsLoader.loadNews();
+		assert (!publishableNews.getPublicContent().contains("Sub Test"));
+	}
+
+	@Test
+	public void loadNewsShouldPublishPublicNews() {
+		final PublishableNews publishableNews = newsLoader.loadNews();
+		assert (publishableNews.getPublicContent().contains("Public Test"));
 	}
 
 	@Before
